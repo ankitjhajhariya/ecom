@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import NavBar from './components/NavBar';
 import Root from './pages/RootPage';
 import Footer from './components/footer';
+import Profile from './pages/profile';
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem('token');
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/" element={<Root />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
         <Route
           path="/dashboard"
           element={

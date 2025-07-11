@@ -1,18 +1,20 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { FaFacebookF, FaGoogle, FaLinkedinIn } from "react-icons/fa";
 
 export default function Signup() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirm, setConfirm] = useState('');
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirm, setConfirm] = useState("");
 
     const signup = async (e) => {
         e.preventDefault();
         const API_URL = import.meta.env.VITE_API_URL;
+
         if (password !== confirm) {
-            alert('Passwords do not match.');
+            alert("Passwords do not match.");
             return;
         }
 
@@ -22,100 +24,104 @@ export default function Signup() {
                 email,
                 password,
             });
-            window.location.href = '/login';
+            window.location.href = "/login";
         } catch (err) {
-            alert(err.response?.data?.message || 'Signup failed.');
+            alert(err.response?.data?.message || "Signup failed.");
         }
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+        <div className="flex items-center justify-center min-h-screen bg-gray-200">
+            <div className="flex w-full max-w-2xl bg-white rounded-lg shadow-lg overflow-hidden">
+                {/* Left side */}
+                <div className="hidden md:flex flex-col items-center text-center justify-center w-3/8 bg-teal-500 text-white p-8">
+                    <h2 className="text-3xl font-bold mb-4">Welcome Back!</h2>
+                    <p className="mb-6 text-center">
+                        To keep connected with us please login with your personal info.
+                    </p>
+                    <Link
+                        to="/login"
+                        className="border border-white px-6 py-2 rounded-full hover:bg-white hover:text-teal-500 transition"
+                    >
+                        Sign In
+                    </Link>
+                </div>
 
-                <form onSubmit={signup} className="space-y-4">
-                    <div>
-                        <label htmlFor="name" className="block mb-1 font-medium text-gray-700">
-                            Name
-                        </label>
+                {/* Right side */}
+                <div className="w-full md:w-5/8 p-8">
+                    <h2 className="text-2xl font-bold mb-4 text-teal-600">
+                        Create Account
+                    </h2>
+
+                    {/* Social icons */}
+                    <div className="flex space-x-4 mb-4 justify-center">
+                        <button className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100">
+                            <FaFacebookF />
+                        </button>
+                        <button className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100">
+                            <FaGoogle />
+                        </button>
+                        <button className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100">
+                            <FaLinkedinIn />
+                        </button>
+                    </div>
+
+                    <p className="text-gray-500 text-sm text-center mb-6">
+                        or use your email for registration:
+                    </p>
+
+                    <form onSubmit={signup} className="space-y-4">
                         <input
                             type="text"
-                            id="name"
-                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Your name"
+                            placeholder="Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
-                            onInvalid={(e) => e.target.setCustomValidity('Please enter your name')}
-                            onInput={(e) => e.target.setCustomValidity('')}
+                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
                         />
-                    </div>
 
-                    <div>
-                        <label htmlFor="email" className="block mb-1 font-medium text-gray-700">
-                            Email address
-                        </label>
                         <input
                             type="email"
-                            id="email"
-                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Your email"
+                            placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            onInvalid={(e) => e.target.setCustomValidity('Please enter your email.')}
-                            onInput={(e) => e.target.setCustomValidity('')}
+                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
                         />
-                    </div>
 
-                    <div>
-                        <label htmlFor="password" className="block mb-1 font-medium text-gray-700">
-                            Password
-                        </label>
                         <input
                             type="password"
-                            id="password"
-                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Create password"
+                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            onInvalid={(e) => e.target.setCustomValidity('Please create a password.')}
-                            onInput={(e) => e.target.setCustomValidity('')}
+                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
                         />
-                    </div>
 
-                    <div>
-                        <label htmlFor="confirm" className="block mb-1 font-medium text-gray-700">
-                            Confirm Password
-                        </label>
                         <input
                             type="password"
-                            id="confirm"
-                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Confirm password"
+                            placeholder="Confirm Password"
                             value={confirm}
                             onChange={(e) => setConfirm(e.target.value)}
                             required
-                            onInvalid={(e) => e.target.setCustomValidity('Please confirm your password.')}
-                            onInput={(e) => e.target.setCustomValidity('')}
+                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
                         />
-                    </div>
 
-                    <button
-                        type="submit"
-                        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition-colors"
-                    >
-                        Sign Up
-                    </button>
-                </form>
+                        <button
+                            type="submit"
+                            className="w-full bg-teal-500 text-white py-2 rounded-full hover:bg-teal-600 transition"
+                        >
+                            Sign Up
+                        </button>
+                    </form>
 
-                <p className="mt-4 text-center text-gray-600">
-                    Already have an account?{' '}
-                    <Link to="/login" className="text-blue-600 hover:underline">
-                        Log In
-                    </Link>
-                </p>
+                    {/* <p className="mt-4 text-center text-gray-600">
+                        Already have an account?{" "}
+                        <Link to="/login" className="text-teal-600 hover:underline">
+                            Log In
+                        </Link>
+                    </p> */}
+                </div>
             </div>
         </div>
     );

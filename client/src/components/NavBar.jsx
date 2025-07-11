@@ -25,7 +25,7 @@ const NavBar = () => {
                 {/* Logo */}
                 <Link
                     to="/"
-                    className="text-3xl md:text-5xl font-extrabold text-gray-800 hover:text-blue-600 transition-colors"
+                    className="text-3xl italic md:text-5xl font-extrabold text-gray-800 hover:text-blue-600 transition-colors"
                 >
                     ECOM
                 </Link>
@@ -44,7 +44,7 @@ const NavBar = () => {
                     <Link to="/" className="px-2 py-1 hover:text-blue-600">
                         <ShoppingCart className="w-6 h-6 text-gray-800" />
                     </Link>
-                    <Link to="/" className="px-2 py-1 hover:text-blue-600">
+                    <Link to="/profile" className="px-2 py-1 hover:text-blue-600">
                         <User className="w-6 h-6 text-gray-800" />
                     </Link>
                 </div>
@@ -85,11 +85,11 @@ const NavBar = () => {
                         <span>Cart</span>
                     </Link>
                     <Link
-                        to="/"
+                        to="/profile"
                         className="py-2 flex items-center space-x-2 hover:text-blue-600 transition"
                         onClick={() => setMenuOpen(false)}
                     >
-                        <User className="w-6 h-6 text-gray-800" />
+                        <User className="w-6 h-6 text-gray-800  " />
                         <span>Profile</span>
                     </Link>
                 </div>
