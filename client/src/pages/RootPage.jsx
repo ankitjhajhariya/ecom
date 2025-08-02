@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Globe, BadgePercent, Lock, Shirt } from "lucide-react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function Root() {
+    const [products, setProducts] = React.useState([]);
+    useEffect(() => {
+        axios
+            .get(import.meta.env.VITE_API_URL + "/api/product")
+            .then((res) => {
+                console.log("Products data fetched successfully:", res.data);
+                setProducts(res.data.products);
+            })
+            .catch((err) => {
+                console.error("Error fetching protected data:", err);
+            }
+
+            );
+    }, []);
+
     const cards = [
         {
             title: "20% Off On Tank Tops",
@@ -20,91 +37,6 @@ export default function Root() {
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac dictum.",
             button: "CHECK OUT",
             image: "https://gracefulworks.com/wp-content/uploads/2020/09/footwear-free-img.jpg",
-        },
-    ];
-
-    const products = [
-        {
-            name: "DNK Yellow Shoes",
-            category: "Men",
-            oldPrice: "$150.00",
-            price: "$120.00",
-            image: "https://lebrouges.in/cdn/shop/files/NIKE-DUNK-LOW-CITRON-PULSE-8.webp?v=1714483529",
-            onSale: true,
-            colors: [],
-        },
-        {
-            name: "DNK Blue Shoes",
-            category: "Men",
-            price: "$200.00 – $240.00",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9rB34Kt0ExreEClzWzdLNzXgbggxXPvSy7yIl7clvXLbnuYgohqRO-2VY9nWEMzRwx7g&usqp=CAU",
-            onSale: false,
-            colors: ["blue", "green", "red"],
-        },
-        {
-            name: "Dark Brown Jeans",
-            category: "Men",
-            price: "$150.00",
-            image: "https://www.jiomart.com/images/product/original/rvlrakmwxy/urbano-fashion-men-s-brown-loose-fit-washed-jeans-non-stretchable-product-images-rvlrakmwxy-0-202403050603.jpg?im=Resize=(500,630)",
-            onSale: false,
-            colors: [],
-        },
-        {
-            name: "Blue Denim Jeans",
-            category: "Women",
-            price: "$150.00",
-            image: "https://static.aceomni.cmsaceturtle.com/prod/product-image/aceomni/Wrangler/Monobrand/WWJN001239/WWJN001239_2.jpg",
-            onSale: false,
-            colors: [],
-        },
-        {
-            name: "Basic Gray Jeans",
-            category: "Women",
-            price: "$150.00",
-            image: "https://images.meesho.com/images/products/421148709/v4ol6_512.webp",
-            onSale: false,
-            colors: [],
-        },
-        {
-            name: "Blue Denim Shorts",
-            category: "Women",
-            oldPrice: "$150.00",
-            price: "$120.00",
-            image: "https://images.meesho.com/images/products/137756060/hv1dr_512.webp",
-            onSale: true,
-            colors: [],
-        },
-        {
-            name: "Anchor Bracelet",
-            category: "Accessories",
-            price: "$150.00 – $180.00",
-            image: "https://images-cdn.ubuy.co.in/6821deae4204bc7f87018ddc-anchor-bracelets-ankle-bracelets.jpg",
-            onSale: false,
-            colors: ["blue", "green", "red"],
-        },
-        {
-            name: "Boho Bangle Bracelet",
-            category: "Accessories",
-            price: "$150.00 – $170.00",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLJ9HbDlTU_1x-4SIoBbi0eS5ME8PxGwT5PQ&s",
-            onSale: false,
-            colors: [],
-        },
-        {
-            name: "Light Brown Purse",
-            category: "Accessories",
-            price: "$150.00",
-            image: "https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-            onSale: false,
-            colors: [],
-        },
-        {
-            name: "Bright Red Bag",
-            category: "Accessories",
-            price: "$100.00 – $140.00",
-            image: "https://media.istockphoto.com/id/154417962/photo/red-luxury-leather-bag-on-white-background.jpg?s=612x612&w=0&k=20&c=m_z_kkWoQpX_vnonNv8k_G771M0vyZrRQZfihbvaNrY=",
-            onSale: false,
-            colors: [],
         },
     ];
 
@@ -155,36 +87,40 @@ export default function Root() {
                 <div className="w-24 h-1 bg-blue-500 mx-auto mb-10"></div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
                     {products.map((product, index) => (
-                        <div key={index} className="group relative">
-                            <div className="overflow-hidden rounded-md shadow hover:shadow-lg transition">
-                                <img src={product.image} alt={product.name} className="w-full h-60 object-cover" />
-                                {product.onSale && (
-                                    <span className="absolute top-4 left-4 bg-white text-xs px-2 py-1 rounded-full shadow">Sale!</span>
+                        <Link to={`/detail/${product._id}`}>
+                            <div key={index} className="group relative" onClick={() => hendalDetail(product._id)}>
+                                <div className="overflow-hidden rounded-md shadow hover:shadow-lg transition">
+                                    <img src={product.image} alt={product.name} className="w-full h-60 object-cover" />
+                                    {product.onSale && (
+                                        <span className="absolute top-4 left-4 bg-white text-xs px-2 py-1 rounded-full shadow">Sale!</span>
+                                    )}
+                                </div>
+                                <h3 className="mt-4 font-semibold">{product.name}</h3>
+                                <p className="text-gray-500 text-sm">{product.category}</p>
+                                {product.oldPrice ? (
+                                    <p className="mt-1">
+                                        <span className="line-through text-gray-500 mr-2">{product.oldPrice}</span>
+                                        <span className="text-black font-bold">{product.price}</span>
+                                    </p>
+                                ) : (
+                                    <p className="mt-1 text-black font-bold">{product.price}</p>
                                 )}
-                            </div>
-                            <h3 className="mt-4 font-semibold">{product.name}</h3>
-                            <p className="text-gray-500 text-sm">{product.category}</p>
-                            {product.oldPrice ? (
-                                <p className="mt-1">
-                                    <span className="line-through text-gray-500 mr-2">{product.oldPrice}</span>
-                                    <span className="text-black font-bold">{product.price}</span>
-                                </p>
-                            ) : (
-                                <p className="mt-1 text-black font-bold">{product.price}</p>
-                            )}
-                            {product.colors.length > 0 && (
-                                <div className="flex space-x-2 mt-2">
-                                    {product.colors.map((color, idx) => (
-                                        <span key={idx} className="w-4 h-4 rounded-full border" style={{ backgroundColor: color }}></span>
+                                {product.colors.length > 0 && (
+                                    <div className="flex space-x-2 mt-2">
+                                        {product.colors.map((color, idx) => (
+                                            <span key={idx} className="w-4 h-4 rounded-full border" style={{ backgroundColor: color }}></span>
+                                        ))}
+                                    </div>
+                                )}
+                                <div className="flex space-x-1 mt-2">
+                                    {[...Array(5)].map((_, i) => (
+                                        <span key={i} className="text-yellow-400">★</span>
                                     ))}
                                 </div>
-                            )}
-                            <div className="flex space-x-1 mt-2">
-                                {[...Array(5)].map((_, i) => (
-                                    <span key={i} className="text-yellow-400">★</span>
-                                ))}
                             </div>
-                        </div>
+                        </Link>
+
+
                     ))}
                 </div>
             </section>

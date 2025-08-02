@@ -23,15 +23,16 @@ export default function Login() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-200">
-            <div className="flex w-full max-w-2xl bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="flex items-center justify-center min-h-screen bg-gray-200 px-4">
+            <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
                 {/* Left: Login */}
-                <div className="w-full md:w-5/8 p-8">
-                    {/* Logo */}
-                    <h2 className="text-2xl font-bold mb-4 text-teal-600">Sign In</h2>
+                <div className="w-full md:w-1/2 p-8">
+                    <h2 className="text-3xl font-bold mb-6 text-teal-600 text-center md:text-left">
+                        Sign In
+                    </h2>
 
                     {/* Social icons */}
-                    <div className="flex space-x-4 mb-4 justify-center">
+                    <div className="flex justify-center md:justify-start space-x-4 mb-6">
                         <button className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100">
                             <FaFacebookF />
                         </button>
@@ -43,7 +44,7 @@ export default function Login() {
                         </button>
                     </div>
 
-                    <p className="text-gray-500 text-sm text-center mb-6">
+                    <p className="text-gray-500 text-sm text-center md:text-left mb-6">
                         or use your email account:
                     </p>
 
@@ -77,12 +78,24 @@ export default function Login() {
                             Sign In
                         </button>
                     </form>
+                    <div className="mt-6 text-center md:hidden">
+                        <p className="text-sm text-gray-600">
+                            Don’t have an account?{" "}
+                            <Link
+                                to="/signup"
+                                className="text-teal-600 font-medium hover:underline hover:text-teal-700 transition"
+                            >
+                                Sign Up
+                            </Link>
+                        </p>
+                    </div>
+
                 </div>
 
                 {/* Right: Side panel */}
-                <div className="hidden md:flex flex-col text-center items-center justify-center w-3/8 bg-teal-500 text-white p-8">
+                <div className="hidden md:flex flex-col items-center justify-center w-full md:w-1/2 bg-teal-500 text-white p-8">
                     <h2 className="text-3xl font-bold mb-4">Hello, Friend!</h2>
-                    <p className="mb-6 text-center">
+                    <p className="mb-6 text-center px-4">
                         Enter your details and start your journey with us.
                     </p>
                     <Link

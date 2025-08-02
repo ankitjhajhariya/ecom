@@ -41,7 +41,7 @@ const NavBar = () => {
                             {item}
                         </Link>
                     ))}
-                    <Link to="/" className="px-2 py-1 hover:text-blue-600">
+                    <Link to="/cart" className="px-2 py-1 hover:text-blue-600">
                         <ShoppingCart className="w-6 h-6 text-gray-800" />
                     </Link>
                     <Link to="/profile" className="px-2 py-1 hover:text-blue-600">

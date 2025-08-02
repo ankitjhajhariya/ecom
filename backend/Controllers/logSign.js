@@ -32,7 +32,7 @@ const logIn = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: user._id }, SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, SECRET, { expiresIn: '800h' });
         res.json({ token, message: 'Login successful!' });
     } catch (err) {
         res.status(500).json({ message: 'Server error', error: err.message });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
 function Profile() {
@@ -8,6 +8,15 @@ function Profile() {
     if (!token) {
         return <Navigate to="/login" replace />;
     }
+
+    useEffect(() => {
+        document.title = "My Account - ECOM";
+        window.scrollTo(0, 0);
+        document.body.classList.add("bg-gray-100");
+        return () => {
+            document.body.classList.remove("bg-gray-100");
+        }
+    }, []);
 
     const logout = () => {
         localStorage.removeItem('token');
@@ -22,7 +31,7 @@ function Profile() {
             <div className="flex flex-col md:flex-row gap-8">
                 {/* Sidebar */}
                 <div className="flex flex-col w-full md:w-1/4 space-y-4">
-                    <button className="text-left px-4 py-2 bg-yellow-400 rounded">
+                    <button className="text-left px-4 py-2  hover:bg-gray-100 rounded">
                         Personal Information
                     </button>
                     <button className="text-left px-4 py-2 hover:bg-gray-100 rounded">

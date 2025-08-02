@@ -31,10 +31,10 @@ export default function Signup() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-200">
-            <div className="flex w-full max-w-2xl bg-white rounded-lg shadow-lg overflow-hidden">
-                {/* Left side */}
-                <div className="hidden md:flex flex-col items-center text-center justify-center w-3/8 bg-teal-500 text-white p-8">
+        <div className="flex items-center justify-center min-h-screen bg-gray-200 px-4">
+            <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
+                {/* Left side panel */}
+                <div className="hidden md:flex flex-col items-center text-center justify-center w-1/2 bg-teal-500 text-white p-8">
                     <h2 className="text-3xl font-bold mb-4">Welcome Back!</h2>
                     <p className="mb-6 text-center">
                         To keep connected with us please login with your personal info.
@@ -47,14 +47,14 @@ export default function Signup() {
                     </Link>
                 </div>
 
-                {/* Right side */}
-                <div className="w-full md:w-5/8 p-8">
-                    <h2 className="text-2xl font-bold mb-4 text-teal-600">
+                {/* Right side form */}
+                <div className="w-full md:w-1/2 p-8">
+                    <h2 className="text-3xl font-bold mb-6 text-teal-600 text-center md:text-left">
                         Create Account
                     </h2>
 
                     {/* Social icons */}
-                    <div className="flex space-x-4 mb-4 justify-center">
+                    <div className="flex justify-center md:justify-start space-x-4 mb-6">
                         <button className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full hover:bg-gray-100">
                             <FaFacebookF />
                         </button>
@@ -66,7 +66,7 @@ export default function Signup() {
                         </button>
                     </div>
 
-                    <p className="text-gray-500 text-sm text-center mb-6">
+                    <p className="text-gray-500 text-sm text-center md:text-left mb-6">
                         or use your email for registration:
                     </p>
 
@@ -115,12 +115,19 @@ export default function Signup() {
                         </button>
                     </form>
 
-                    {/* <p className="mt-4 text-center text-gray-600">
-                        Already have an account?{" "}
-                        <Link to="/login" className="text-teal-600 hover:underline">
-                            Log In
-                        </Link>
-                    </p> */}
+                    {/* Mobile: Sign In link */}
+                    <div className="mt-6 text-center md:hidden">
+                        <p className="text-sm text-gray-600">
+                            Already have an account?{" "}
+                            <Link
+                                to="/login"
+                                className="text-teal-600 font-medium hover:underline hover:text-teal-700 transition"
+                            >
+                                Sign In
+                            </Link>
+                        </p>
+                    </div>
+
                 </div>
             </div>
         </div>
