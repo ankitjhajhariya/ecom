@@ -23,4 +23,8 @@ router.post('/cart/add', authMiddleware, protectedController.addToCart);
 
 router.get('/cart', authMiddleware, protectedController.cart);
 
+router.delete('/cart/remove/:productId', authMiddleware, protectedController.removeFromCart);
+
+router.put('/cart/update', authMiddleware, protectedController.quantity);
+
 module.exports = router;

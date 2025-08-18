@@ -4,8 +4,10 @@ import axios from "axios";
 
 export default function Cart() {
     const [cart, setCart] = useState(null);
+    const [Subtotal, setSubtotal] = useState(0);
     const navigate = useNavigate();
 
+    // Fetch cart on mount
     useEffect(() => {
         const token = localStorage.getItem("token");
 
@@ -19,13 +21,64 @@ export default function Cart() {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((res) => {
-                setCart(res.data.cart || res.data); // support both { cart } and direct object
+                setCart(res.data.cart || res.data);
                 console.log("Cart items fetched successfully:", res.data);
             })
             .catch((err) => {
                 console.error("Error fetching cart items:", err);
             });
     }, [navigate]);
+
+    // Recalculate subtotal on cart change
+    useEffect(() => {
+        if (cart && Array.isArray(cart.products)) {
+            const total = cart.products.reduce((sum, item) => {
+                const product = item.productId;
+                if (product && typeof product === "object") {
+                    return sum + product.price * item.quantity;
+                }
+                return sum;
+            }, 0);
+            setSubtotal(total);
+        }
+    }, [cart]);
+
+    // Update item quantity
+    const updateQuantity = (itemId, newQty) => {
+        if (newQty < 1) return;
+
+        const token = localStorage.getItem("token");
+        axios
+            .put(
+                import.meta.env.VITE_API_URL + `/api/cart/update`,
+                { itemId, quantity: newQty },
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+            .then((res) => {
+                setCart(res.data.cart || res.data);
+            })
+            .catch((err) => {
+                console.error("Error updating quantity:", err);
+            });
+    };
+
+    // Remove item
+    const removeItem = (itemId) => {
+        const token = localStorage.getItem("token");
+        console.log("Removing item with ID:", itemId);
+        console.log("Using token:", token);
+
+        axios
+            .delete(import.meta.env.VITE_API_URL + `/api/cart/remove/${itemId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((res) => {
+                setCart(res.data.cart || res.data);
+            })
+            .catch((err) => {
+                console.error("Error removing item:", err);
+            });
+    };
 
     if (!cart || !Array.isArray(cart.products) || cart.products.length === 0) {
         return (
@@ -55,8 +108,6 @@ export default function Cart() {
                     <tbody className="divide-y divide-gray-200">
                         {cart.products.map((item, index) => {
                             const product = item.productId;
-
-                            // 🔒 Skip if product is not populated
                             if (!product || typeof product !== "object") return null;
 
                             return (
@@ -76,20 +127,101 @@ export default function Cart() {
                                             </div>
                                         </Link>
                                     </td>
-                                    <td className="px-6 py-4 font-medium">x{item.quantity}</td>
-                                    <td className="px-6 py-4 text-gray-700">₹{product.price}</td>
-                                    <td className="px-6 py-4 font-semibold text-gray-900">
-                                        ₹{product?.price && item?.quantity ? (product.price * item.quantity).toFixed(2) : "0.00"}
+
+                                    <td className="px-6 py-4 font-medium">
+                                        <div className="flex items-center space-x-2">
+                                            <button
+                                                className="px-2 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300"
+                                                onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                                            >
+                                                −
+                                            </button>
+                                            <span className="min-w-[24px] text-center">{item.quantity}</span>
+                                            <button
+                                                className="px-2 py-1 text-sm bg-gray-200 rounded hover:bg-gray-300"
+                                                onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                                            >
+                                                +
+                                            </button>
+                                            <button
+                                                className="ml-4 px-2 py-1 text-sm text-red-600 hover:underline"
+                                                onClick={() => removeItem(item._id)}
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
                                     </td>
 
+                                    <td className="px-6 py-4 text-gray-700">₹{product.price}</td>
+
+                                    <td className="px-6 py-4 font-semibold text-gray-900">
+                                        ₹{(product.price * item.quantity).toFixed(2)}
+                                    </td>
                                 </tr>
                             );
                         })}
                     </tbody>
                 </table>
+
+                {/* Cart Total */}
+                <div className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg mt-8">
+                    <h2 className="text-2xl font-bold mb-6 text-gray-800">Cart Totals</h2>
+
+                    <div className="flex justify-between items-center mb-4">
+                        <span className="text-lg font-medium text-gray-700">Subtotal:</span>
+                        <span className="text-lg font-bold text-gray-900">
+                            ₹{Subtotal.toFixed(2)}
+                        </span>
+                    </div>
+
+                    <div className="flex items-center mb-4">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-blue-600 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M3 3h18a2 2 0 012 2v14a2 2 0 01-2 2H3a2 2 0 01-2-2V5a2 2 0 012-2z"
+                            />
+                        </svg>
+                        <span className="text-lg text-gray-700 font-medium">
+                            Shipping: <span className="text-green-600 font-semibold">Free</span>
+                        </span>
+                    </div>
+
+                    <div className="flex items-center mb-6">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-green-600 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                            />
+                        </svg>
+                        <span className="text-green-600 font-medium">All items verified</span>
+                    </div>
+
+                    <div className="flex justify-end">
+                        <Link
+                            to="/checkout"
+                            className="bg-blue-600 text-white px-6 py-2 rounded-xl shadow hover:bg-blue-700 transition duration-200"
+                        >
+                            Proceed to Checkout
+                        </Link>
+                    </div>
+                </div>
             </div>
-
         </section>
-
     );
 }

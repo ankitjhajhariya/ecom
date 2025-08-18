@@ -61,28 +61,75 @@ const addToCart = async (req, res) => {
 };
 
 const removeFromCart = async (req, res) => {
-    const { productId } = req.body;
+    // console.log("Removing from cart...");
+
+    const { productId } = req.params; // if using DELETE /api/cart/remove/:productId
     const userId = req.user.id;
+
+    if (!productId) {
+        return res.status(400).json({ message: 'Product ID is required' });
+    }
 
     try {
         const cart = await Cart.findOne({ userId });
+
         if (!cart) {
             return res.status(404).json({ message: 'Cart not found' });
         }
+
+        const initialLength = cart.products.length;
         cart.products = cart.products.filter(
             (p) => p.productId.toString() !== productId
         );
+
+        if (cart.products.length === initialLength) {
+            return res.status(404).json({ message: 'Product not found in cart' });
+        }
+
         await cart.save();
-        return res.status(200).json({ message: 'Product removed from cart successfully' });
-    }
-    catch (err) {
+
+        return res.status(200).json({
+            message: 'Product removed from cart successfully',
+            cart,
+        });
+    } catch (err) {
         return res.status(500).json({
             message: 'Failed to remove product from cart',
             error: err.message,
         });
     }
-
 };
+
+const quantity = async (req, res) => {
+    const { itemId, quantity } = req.body;
+    const userId = req.user.id;
+    if (!itemId || !quantity) {
+        return res.status(400).json({ message: 'Item ID and quantity are required' });
+    }
+    try {
+        const cart = await Cart.findOne({ userId });
+
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        const itemIndex = cart.products.findIndex(p => p.productId.toString() === itemId);
+        if (itemIndex === -1) {
+            return res.status(404).json({ message: 'Item not found in cart' });
+        }
+
+        cart.products[itemIndex].quantity = quantity;
+        await cart.save();
+
+        return res.status(200).json({ message: 'Quantity updated successfully', cart });
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Failed to update quantity',
+            error: err.message,
+        });
+    }
+}
+
 
 const cart = async (req, res) => {
     try {
@@ -112,4 +159,6 @@ module.exports = {
     cart,
     removeFromCart,
     addToCart,
+    removeFromCart,
+    quantity,
 };
