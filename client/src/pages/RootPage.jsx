@@ -88,7 +88,7 @@ export default function Root() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
                     {products.map((product, index) => (
                         <Link to={`/detail/${product._id}`}>
-                            <div key={index} className="group relative" onClick={() => hendalDetail(product._id)}>
+                            <div key={index} className="group relative" >
                                 <div className="overflow-hidden rounded-md shadow hover:shadow-lg transition">
                                     <img src={product.image} alt={product.name} className="w-full h-60 object-cover" />
                                     {product.onSale && (
